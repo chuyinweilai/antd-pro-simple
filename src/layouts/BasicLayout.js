@@ -8,7 +8,7 @@ import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
 import Media from 'react-media';
-import { formatMessage } from 'umi/locale';
+// import { formatMessage } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
 import logo from '../assets/logo.svg';
 import Footer from './Footer';
@@ -61,7 +61,6 @@ class BasicLayout extends React.PureComponent {
   componentWillMount(){
     let menuData = sessionStorage.getItem('menuData');
     menuData = JSON.parse(menuData);
-    console.log(menuData)
     this.menuData = menuData;
   }
 
@@ -126,10 +125,7 @@ class BasicLayout extends React.PureComponent {
     if (!currRouterData) {
       return title;
     }
-    const pageName = formatMessage({
-      id: currRouterData.locale || currRouterData.name,
-      defaultMessage: currRouterData.name,
-    });
+    const pageName =  currRouterData.name;
 
     return `${pageName} - ${title}`;
   };
@@ -175,8 +171,6 @@ class BasicLayout extends React.PureComponent {
     } = this.props;
     const menuData = this.menuData;
     // const menuData = menuDatas;
-    console.log('menuData---->', menuData)
-    console.log('menuDatas---->', menuDatas)
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
@@ -187,7 +181,7 @@ class BasicLayout extends React.PureComponent {
             logo={logo}
             theme={navTheme}
             onCollapse={this.handleMenuCollapse}
-            menuData={menuData}
+            menuData={menuDatas}
             isMobile={isMobile}
             {...this.props}
           />
@@ -199,7 +193,7 @@ class BasicLayout extends React.PureComponent {
           }}
         >
           <Header
-            menuData={menuData}
+            menuData={menuDatas}
             handleMenuCollapse={this.handleMenuCollapse}
             logo={logo}
             isMobile={isMobile}
@@ -225,7 +219,7 @@ class BasicLayout extends React.PureComponent {
             )}
           </ContainerQuery>
         </DocumentTitle>
-        <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense>
+        {/* <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense> */}
       </React.Fragment>
     );
   }

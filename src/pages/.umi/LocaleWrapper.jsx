@@ -28,7 +28,7 @@ defaultAntd = defaultAntd.default || defaultAntd;
 const localeInfo = {
   'en-US': {
     messages: {
-      ...require('/Users/Miku/Desktop/project/my-project/src/locales/en-US.js').default,
+      ...require('/Users/Miku/Desktop/project/antd-pro-simple/src/locales/en-US.js').default,
     },
     locale: 'en-US',
     antd: require('antd/lib/locale-provider/en_US'),
@@ -37,7 +37,7 @@ const localeInfo = {
   },
   'pt-BR': {
     messages: {
-      ...require('/Users/Miku/Desktop/project/my-project/src/locales/pt-BR.js').default,
+      ...require('/Users/Miku/Desktop/project/antd-pro-simple/src/locales/pt-BR.js').default,
     },
     locale: 'pt-BR',
     antd: require('antd/lib/locale-provider/pt_BR'),
@@ -46,7 +46,7 @@ const localeInfo = {
   },
   'zh-CN': {
     messages: {
-      ...require('/Users/Miku/Desktop/project/my-project/src/locales/zh-CN.js').default,
+      ...require('/Users/Miku/Desktop/project/antd-pro-simple/src/locales/zh-CN.js').default,
     },
     locale: 'zh-CN',
     antd: require('antd/lib/locale-provider/zh_CN'),
@@ -55,7 +55,7 @@ const localeInfo = {
   },
   'zh-TW': {
     messages: {
-      ...require('/Users/Miku/Desktop/project/my-project/src/locales/zh-TW.js').default,
+      ...require('/Users/Miku/Desktop/project/antd-pro-simple/src/locales/zh-TW.js').default,
     },
     locale: 'zh-TW',
     antd: require('antd/lib/locale-provider/zh_TW'),

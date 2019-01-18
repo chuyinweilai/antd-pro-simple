@@ -1,36 +1,30 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
 import {
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  Button,
   Card,
-  InputNumber,
-  Radio,
-  Icon,
-  Tooltip,
+  Button
 } from 'antd';
+import { routerRedux } from 'dva/router';
+import router from 'umi/router';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-const FormItem = Form.Item;
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
 
 export default class HelloWorld extends PureComponent {
+
+  router = () => {
+    router.push({
+      pathname: '/design/tools',
+      // pathname: '/furnitures/list',
+    });
+  }
 
   render() {
 
     return (
-      <PageHeaderWrapper
-        title={<FormattedMessage id="app.forms.basic.title" />}
-        content={<FormattedMessage id="app.forms.basic.description" />}
-      >
+      <PageHeaderWrapper title="首页" >
         <Card bordered={false}>
-        123
+        HelloWorld
+        <Button onClick={this.router} type="primary">Router Button</Button>
         </Card>
       </PageHeaderWrapper>
     );

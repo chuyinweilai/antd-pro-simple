@@ -1,5 +1,6 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
+import { stringify } from 'qs';
 import router from 'umi/router';
 import hash from 'hash.js';
 import { isAntdPro } from './utils';
@@ -152,4 +153,15 @@ export default function request(url, option) {
         router.push('/exception/404');
       }
     });
+}
+
+export function requestGet(url, params){
+  return request(`${url}?${stringify(params)}`, { method: 'GET' })
+}
+
+export function requestPost(url, params){
+  return request(url, {
+    method: 'POST',
+    body: params,
+  });
 }

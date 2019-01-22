@@ -1,65 +1,15 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
+import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
-
-import memoizeOne from 'memoize-one';
-import isEqual from 'lodash/isEqual';
-import { formatMessage } from 'umi/locale';
-
-// Conversion router to menu.
-function formatter(route){
-  return route.map(item => {
-    const result = {
-      ...item,
-      authority: item.authority || 'admin',
-    };
-    if (item.routes) {
-      const children = formatter(item.routes, item.authority);
-      // Reduce memory usage
-      result.children = children;
-    }
-    delete result.routes;
-    return result;
-  })
-}
-
-/**
- * get SubMenu or Item
- */
-const getSubMenu = item => {
-  // doc: add hideChildrenInMenu
-  if (item.children && !item.hideChildrenInMenu && item.children.some(child => child.name)) {
-    return {
-      ...item,
-      children: filterMenuData(item.children), // eslint-disable-line
-    };
-  }
-  return item;
-};
-
-/**
- * filter menuData
- */
-const filterMenuData = menuData => {
-  if (!menuData) {
-    return [];
-  }
-  return menuData
-    .filter(item => item.name && !item.hideInMenu)
-    .map(item => check(item.authority, getSubMenu(item)))
-    .filter(item => item);
-};
 
 export default {
   namespace: 'login',
 
   state: {
     status: undefined,
-    menuData: [],
-    breadcrumbNameMap: {},
   },
 
   effects: {
@@ -74,24 +24,20 @@ export default {
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
-        // let { redirect } = params;
-        // if (redirect) {
-        //   const redirectUrlParams = new URL(redirect);
-        //   if (redirectUrlParams.origin === urlParams.origin) {
-        //     redirect = redirect.substr(urlParams.origin.length);
-        //     if (redirect.match(/^\/.*#/)) {
-        //       redirect = redirect.substr(redirect.indexOf('#') + 1);
-        //     }
-        //   } else {
-        //     window.location.href = redirect;
-        //     return;
-        //   }
-        // }
-        // yield put(routerRedux.replace(redirect || '/'));
-        yield put(routerRedux.replace('/'));
-        // const { menu } = response;
-        // const menuData = formatter(menu);
-        // sessionStorage.setItem('menuData', JSON.stringify(menuData));
+        let { redirect } = params;
+        if (redirect) {
+          const redirectUrlParams = new URL(redirect);
+          if (redirectUrlParams.origin === urlParams.origin) {
+            redirect = redirect.substr(urlParams.origin.length);
+            if (redirect.match(/^\/.*#/)) {
+              redirect = redirect.substr(redirect.indexOf('#') + 1);
+            }
+          } else {
+            window.location.href = redirect;
+            return;
+          }
+        }
+        yield put(routerRedux.replace(redirect || '/'));
       }
     },
 
@@ -120,12 +66,6 @@ export default {
   },
 
   reducers: {
-    // save(state, action) {
-    //   return {
-    //     ...state,
-    //     ...action.payload,
-    //   };
-    // },
     changeLoginStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);
       return {

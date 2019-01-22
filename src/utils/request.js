@@ -1,9 +1,9 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
-import { stringify } from 'qs';
 import router from 'umi/router';
 import hash from 'hash.js';
 import { isAntdPro } from './utils';
+import { stringify } from 'qs';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',

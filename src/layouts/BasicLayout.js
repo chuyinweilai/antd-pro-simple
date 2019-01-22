@@ -8,7 +8,7 @@ import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
 import Media from 'react-media';
-// import { formatMessage } from 'umi/locale';
+import { formatMessage } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
 import logo from '../assets/logo.svg';
 import Footer from './Footer';
@@ -17,7 +17,8 @@ import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
-import { title } from '../defaultSettings';
+import { menu, title } from '../defaultSettings';
+
 import styles from './BasicLayout.less';
 
 // lazy load SettingDrawer
@@ -55,13 +56,6 @@ class BasicLayout extends React.PureComponent {
     super(props);
     this.getPageTitle = memoizeOne(this.getPageTitle);
     this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
-    this.menuData = null
-  }
-
-  componentWillMount(){
-    let menuData = sessionStorage.getItem('menuData');
-    menuData = JSON.parse(menuData);
-    this.menuData = menuData;
   }
 
   componentDidMount() {
@@ -125,7 +119,12 @@ class BasicLayout extends React.PureComponent {
     if (!currRouterData) {
       return title;
     }
-    const pageName =  currRouterData.name;
+    const pageName = menu.disableLocal
+      ? currRouterData.name
+      : formatMessage({
+          id: currRouterData.locale || currRouterData.name,
+          defaultMessage: currRouterData.name,
+        });
 
     return `${pageName} - ${title}`;
   };
@@ -164,13 +163,12 @@ class BasicLayout extends React.PureComponent {
       children,
       location: { pathname },
       isMobile,
-      menuDatas,
+      menuData,
       breadcrumbNameMap,
       route: { routes },
       fixedHeader,
     } = this.props;
-    const menuData = this.menuData;
-    // const menuData = menuDatas;
+
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
@@ -181,7 +179,7 @@ class BasicLayout extends React.PureComponent {
             logo={logo}
             theme={navTheme}
             onCollapse={this.handleMenuCollapse}
-            menuData={menuDatas}
+            menuData={menuData}
             isMobile={isMobile}
             {...this.props}
           />
@@ -193,7 +191,7 @@ class BasicLayout extends React.PureComponent {
           }}
         >
           <Header
-            menuData={menuDatas}
+            menuData={menuData}
             handleMenuCollapse={this.handleMenuCollapse}
             logo={logo}
             isMobile={isMobile}
@@ -219,23 +217,19 @@ class BasicLayout extends React.PureComponent {
             )}
           </ContainerQuery>
         </DocumentTitle>
-        {/* <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense> */}
+        <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense>
       </React.Fragment>
     );
   }
 }
 
-
-export default connect(({ global, setting, menu, login }) => {
-  return ({
-    collapsed: global.collapsed,
-    layout: setting.layout,
-    menuDatas: menu.menuData,
-    breadcrumbNameMap: menu.breadcrumbNameMap,
-    ...setting,
-  })
-})
-(props => (
+export default connect(({ global, setting, menu: menuModel }) => ({
+  collapsed: global.collapsed,
+  layout: setting.layout,
+  menuData: menuModel.menuData,
+  breadcrumbNameMap: menuModel.breadcrumbNameMap,
+  ...setting,
+}))(props => (
   <Media query="(max-width: 599px)">
     {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
   </Media>

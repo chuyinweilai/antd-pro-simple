@@ -1,7 +1,7 @@
 // https://umijs.org/config/
 import os from 'os';
 import pageRoutes from './router.config';
-// import webpackPlugin from './plugin.config';
+import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
 import slash from 'slash2';
 
@@ -72,13 +72,13 @@ export default {
   externals: {
     '@antv/data-set': 'DataSet',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/api/': {
+      target: 'http://140.143.167.13:8082/merchant/v1/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
@@ -110,5 +110,5 @@ export default {
     basePath: '/',
   },
 
-  // chainWebpack: webpackPlugin,
+  chainWebpack: webpackPlugin,
 };

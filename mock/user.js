@@ -90,14 +90,6 @@ export default {
       });
       return;
     }
-    if (password === 'ant.design' && userName === 'design') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'design'
-      });
-      return;
-    }
     res.send({
       status: 'error',
       type,

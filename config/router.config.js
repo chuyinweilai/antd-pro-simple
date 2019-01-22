@@ -35,15 +35,28 @@ export default [
       },
       {
         path: '/furnitures',
-        authority: 'user',
         name: '电商管理',
+        authority: ['admin', 'user'],     // 多权限实用数组格式
         routes: [
           { path: '/furnitures', redirect: '/furnitures/list' },
           {
+            path: '/furnitures/tags', 
+            name: '商品标签', 
+            authority: ['admin', 'user'],     // 多权限实用数组格式
+            component: './furnitures/tags',
+          },
+          {
             path: '/furnitures/list', 
             name: '商品列表', 
-            authority: 'user',
+            authority: ['admin', 'user'],     // 多权限实用数组格式
             component: './furnitures/list',
+          },
+          {
+            path: '/furnitures/list/edit', 
+            name: '商品列表编辑', 
+            hideInMenu: true,
+            authority: ['admin', 'user'],     // 多权限实用数组格式
+            component: './furnitures/list/edit',
           }
         ],
       },

@@ -1,8 +1,8 @@
 import memoizeOne from 'memoize-one';
 import isEqual from 'lodash/isEqual';
 import { formatMessage } from 'umi/locale';
-import { routerRedux } from 'dva/router';
 import Authorized from '@/utils/Authorized';
+import { menu } from '../defaultSettings';
 
 const { check } = Authorized;
 
@@ -14,12 +14,21 @@ function formatter(data, parentAuthority, parentName) {
         return null;
       }
 
-      let locale = item.name || 'menu';
+      let locale = 'menu';
+      if (parentName) {
+        locale = `${parentName}.${item.name}`;
+      } else {
+        locale = `menu.${item.name}`;
+      }
+      // if enableMenuLocale use item.name,
+      // close menu international
+      const name = menu.disableLocal
+        ? item.name
+        : formatMessage({ id: locale, defaultMessage: item.name });
       const result = {
         ...item,
-        // name: formatMessage({ id: locale, defaultMessage: item.name }),
-        // locale,
-        title : locale,
+        name,
+        locale,
         authority: item.authority || parentAuthority,
       };
       if (item.routes) {
@@ -94,9 +103,8 @@ export default {
   effects: {
     *getMenuData({ payload }, { put }) {
       const { routes, authority } = payload;
-      const menuData =  filterMenuData(memoizeOneFormatter(routes, authority));
+      const menuData = filterMenuData(memoizeOneFormatter(routes, authority));
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(menuData);
-      yield put(routerRedux.replace(menuData[0].path || '/'));
       yield put({
         type: 'save',
         payload: { menuData, breadcrumbNameMap },

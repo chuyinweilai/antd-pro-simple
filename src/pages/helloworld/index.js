@@ -4,7 +4,6 @@ import {
   Card,
   Button
 } from 'antd';
-import { routerRedux } from 'dva/router';
 import router from 'umi/router';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 

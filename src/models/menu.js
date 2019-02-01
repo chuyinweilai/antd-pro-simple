@@ -22,13 +22,14 @@ function formatter(data, parentAuthority, parentName) {
       }
       // if enableMenuLocale use item.name,
       // close menu international
-      const name = menu.disableLocal
-        ? item.name
-        : formatMessage({ id: locale, defaultMessage: item.name });
+      // const name = menu.disableLocal
+      //   ? item.name
+      //   : formatMessage({ id: locale, defaultMessage: item.name });
       const result = {
         ...item,
-        name,
-        locale,
+        // name,
+        // locale,
+        title: item.name || '',
         authority: item.authority || parentAuthority,
       };
       if (item.routes) {

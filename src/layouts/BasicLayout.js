@@ -119,14 +119,15 @@ class BasicLayout extends React.PureComponent {
     if (!currRouterData) {
       return title;
     }
-    const pageName = menu.disableLocal
-      ? currRouterData.name
-      : formatMessage({
-          id: currRouterData.locale || currRouterData.name,
-          defaultMessage: currRouterData.name,
-        });
+    return currRouterData.name
+    // const pageName = menu.disableLocal
+    //   ? currRouterData.name
+    //   : formatMessage({
+    //       id: currRouterData.locale || currRouterData.name,
+    //       defaultMessage: currRouterData.name,
+    //     });
 
-    return `${pageName} - ${title}`;
+    // return `${pageName} - ${title}`;
   };
 
   getLayoutStyle = () => {
